@@ -17,8 +17,9 @@ namespace GameJam.Players
 		[SerializeField] float jumpHeight = 1.25f;
 
 		new Rigidbody2D rigidbody;
+		float velocityY;
 
-		Int2 input;
+		float inputX;
 		bool jumping;
 
 		public bool IsGrounded { get; private set; }
@@ -26,10 +27,8 @@ namespace GameJam.Players
 
 		void Update()
 		{
-			input = InputHelper.GetWASDMovement();
+			inputX = InputHelper.GetWASDMovement().x;
 			jumping = Input.GetKeyDown(KeyCode.Space);
-
-			DebugHelper.Log(input);
 		}
 
 		void FixedUpdate()
@@ -38,16 +37,18 @@ namespace GameJam.Players
 			IsGrounded = Physics2D.Raycast(transform.position, Vector2.down, 0.1f);
 
 			//Set velocity
-			float y = Gravity;
-
-			if (jumping && IsGrounded)
+			if (IsGrounded)
 			{
-				y += Mathf.Sqrt(-2f * Gravity * jumpHeight);
-				jumping = false;
+				if (jumping)
+				{
+					velocityY = Mathf.Sqrt(-2f * Gravity * jumpHeight);
+					jumping = false;
+				}
+				else velocityY = 0f;
 			}
+			else velocityY += Gravity * Time.fixedDeltaTime;
 
-			rigidbody.velocity = input * movementSpeed;
-			rigidbody.velocity += new Vector2(0f, y);
+			rigidbody.velocity = new Vector2(inputX * movementSpeed, velocityY);
 		}
 	}
 }
