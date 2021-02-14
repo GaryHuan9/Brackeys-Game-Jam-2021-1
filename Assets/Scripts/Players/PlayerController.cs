@@ -28,7 +28,7 @@ namespace GameJam.Players
 		void Update()
 		{
 			inputX = InputHelper.GetWASDMovement().x;
-			jumping = Input.GetKeyDown(KeyCode.Space);
+			jumping |= Input.GetKeyDown(KeyCode.Space);
 		}
 
 		void FixedUpdate()
@@ -44,7 +44,7 @@ namespace GameJam.Players
 					velocityY = Mathf.Sqrt(-2f * Gravity * jumpHeight);
 					jumping = false;
 				}
-				else velocityY = 0f;
+				else velocityY = Gravity;
 			}
 			else velocityY += Gravity * Time.fixedDeltaTime;
 
