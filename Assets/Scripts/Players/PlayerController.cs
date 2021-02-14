@@ -1,4 +1,5 @@
 using System;
+using CodeHelpers.Diagnostics;
 using CodeHelpers.Mathematics;
 using CodeHelpers.Unity;
 using UnityEngine;
@@ -27,6 +28,8 @@ namespace GameJam.Players
 		{
 			input = InputHelper.GetWASDMovement();
 			jumping = Input.GetKeyDown(KeyCode.Space);
+
+			DebugHelper.Log(input);
 		}
 
 		void FixedUpdate()
