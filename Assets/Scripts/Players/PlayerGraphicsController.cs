@@ -17,19 +17,18 @@ namespace GameJam.Players
 		[Space]
 		//
 		[SerializeField] float tiltAngle = 15f;
-		[SerializeField] float tiltTime = 0.6f;
+		[SerializeField] float tiltTime = 0.2f;
 
 		new Rigidbody2D rigidbody;
 
 		int tiltDirection;
 		float tiltVelocity;
+		float currentAngle;
 
 		void Update()
 		{
-			float angle = image.transform.eulerAngles.z;
-
-			angle = Scalars.Damp(angle, tiltDirection * tiltAngle, ref tiltVelocity, tiltTime, Time.deltaTime);
-			image.transform.eulerAngles = Float3.forward * angle;
+			currentAngle = Scalars.Damp(currentAngle, tiltDirection * tiltAngle, ref tiltVelocity, tiltTime, Time.deltaTime);
+			image.transform.eulerAngles = Float3.forward * currentAngle.ToSignedAngle();
 		}
 
 		void FixedUpdate()
@@ -41,7 +40,7 @@ namespace GameJam.Players
 			if (Math.Abs(velocity.x) < animationThreshold) return;
 
 			image.flipX = velocity.x > 0f;
-			tiltDirection = velocity.x.Sign();
+			tiltDirection = -velocity.x.Sign();
 		}
 	}
 }
